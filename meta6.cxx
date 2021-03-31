@@ -1,43 +1,28 @@
-#include "json.hpp"
-#include <fstream>
 #include <iostream>
+#include <iomanip>
+#include <fstream>
+#include <iterator>
+#include <vector>
 
-using namespace nlohmann;
-
-// Load types.json at compile time.
-@meta std::ifstream file("types.json");
-@meta json j;
-@meta file>> j;
-
-@meta for(json& types : j["types"]) {
-
-  // Use a dynamic name to turn the JSON "name" value into an identifier.
-  struct @(types["name"]) {
-
-    // Loop over the JSON "members" array.
-    @meta for(json& members : types["members"]) {
-      // Emit each member.
-      @type_id(members["type"]) @(members["name"]);
-
-      // Imagine
-      // @type_id("int*") @("p");
-    }
-  };
+template<typename type_t>
+std::vector<type_t> load_file(const char* name) {
+  std::ifstream f(name, std::ios::binary);
+  std::vector<type_t> data;
+  std::copy(
+    std::istreambuf_iterator<type_t>(f), 
+    std::istreambuf_iterator<type_t>(),
+    std::back_inserter(data)
+  );
+  return data;
 }
 
-// Make a typed enum to keep a record of the types we injected.
-enum typename new_types_t {
-  @meta for(json& types : j["types"])
-    @type_id(types["name"]);
-};
+@meta std::vector<char> blah = load_file<char>(__FILE__);
+
+const char embed[] { blah[:]... };
+
+// Also, @embed as a first class language feature.
+const char embed2[] = @embed(char, __FILE__);
 
 int main() {
-  @meta for enum(new_types_t e : new_types_t) {
-    std::cout<< @enum_type_string(e)<< ":\n";
-    std::cout<< "  "<< @member_decl_strings(@enum_type(e))<< ";\n" ...;
-  }
-
-  // You can use these as normal types.
-  address_t my_address;
-  my_address.zip = 10003;
+  std::cout.write(embed, embed.length);
 }

@@ -1,6 +1,7 @@
 #include <cstdlib>
 #include <cstdio>
 #include <ctime>
+#include <string>
 
 // Use popen to make a system call and capture the output in a file handle.
 // Make it inline to prevent it from being output by the backend.
@@ -10,11 +11,9 @@ inline int capture_call(const char* cmd, char* text, int len) {
   pclose(f);
 }
 
-// Every time print_version is compiled, it runs "git rev-parse HEAD" to
-// get the current commit hash.
-void print_version() {
+inline std::string get_version_string() {
   // Make a format specifier to print the first 10 digits of the git hash.
-  @meta const char* fmt =
+  const char* fmt =
     "--version:\n"
     "  Circle compiler\n"
     "  Written by Sean Baxter\n"
@@ -24,23 +23,26 @@ void print_version() {
     "  Machine %s\n";
 
   // Get the time of compilation.
-  @meta time_t t = time(0);
-  @meta const char* time = asctime(gmtime(&t));
+  time_t t = time(0);
+  const char* time = asctime(gmtime(&t));
 
   // Retrieve the current commit hash. The hash is 40 digits long, and we
   // include space for null.
-  @meta char hash[41];
-  @meta capture_call("git rev-parse HEAD", hash, 41);
+  char hash[41];
+  capture_call("git rev-parse HEAD", hash, 41);
 
-  @meta char uname[100];
-  @meta capture_call("uname -srm", uname, 100);
+  char uname[100];
+  capture_call("uname -srm", uname, 100);
 
   // Substitute into the format specifier.
-  @meta char text[200];
-  @meta sprintf(text, fmt, time, __circle_build__, hash, uname);
+  char text[200];
+  sprintf(text, fmt, time, __circle_build__, hash, uname);
   
-  // Convert text to a string literal, then print that.
-  puts(@string(text));
+  return text;
+}
+
+void print_version() {
+  puts(@string(get_version_string()));
 }
 
 int main() {

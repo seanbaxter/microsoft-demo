@@ -3,8 +3,10 @@ circle meta2.cxx && ./meta2
 circle meta3.cxx && ./meta3
 circle meta4.cxx && ./meta4
 circle meta5.cxx && ./meta5
-circle meta6.cxx && ./meta6
-circle meta7.cxx && ./meta7 # circle -S -emit-llvm meta7.cxx && more meta7.ll
+circle meta6.cxx && ./meta6 # circle meta6.cxx -S -emit-llvm && more meta6.ll
+circle meta7.cxx && ./meta7
+circle meta8.cxx && ./meta8
+circle meta9.cxx && ./meta9 # circle meta9.cxx -S -emit-llvm && more meta9.ll
 
 # typed enums
 circle enum1.cxx && ./enum1

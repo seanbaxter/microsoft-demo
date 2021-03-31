@@ -1,4 +1,4 @@
-// Check me out at https://github.com/seanbaxter/intel
+// Check me out at https://github.com/seanbaxter/microsoft-demo
 
 #include <iostream>
 

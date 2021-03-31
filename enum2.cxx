@@ -16,7 +16,7 @@ int main() {
 
   // Create a class with members from the typelist.
   struct foo_t {
-    @enum_types(my_types_t) @(int...)[2] ...;
+    @enum_types(my_types_t) @(int...) ...;
   };
   std::cout<< "foo_t:\n";
   std::cout<< "  "<< @member_decl_strings(foo_t)<< "\n"...;
