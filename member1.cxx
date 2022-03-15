@@ -9,14 +9,14 @@ int main() {
   };
   foo_t obj { 42, 3.14f, "A class" };
   std::cout<< "A class:\n";
-  std::cout<< "  "<< int...<< ": "<< obj...[:]<< "\n"...;
+  std::cout<< "  "<< int...<< ": "<< obj.[:]<< "\n"...;
 
   auto tuple = std::make_tuple(128, 1.618, "A tuple");
   std::cout<< "A tuple:\n";
-  std::cout<< "  "<< int...<< ": "<< tuple...[:]<< "\n"...;
+  std::cout<< "  "<< int...<< ": "<< tuple.[:]<< "\n"...;
 
   [](auto... x) {
     std::cout<< "Lambda:\n";
     std::cout<< "  "<< int...<< ": "<< x<< "\n"...;
-  }(obj...[:]..., tuple...[:]...);
+  }(obj..., tuple...);
 }

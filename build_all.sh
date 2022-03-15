@@ -27,5 +27,5 @@ circle member1.cxx && ./member1
 circle member2.cxx && ./member2
 
 # shader stuff
-circle -shader -emit-spirv -c shuffle.cxx -E comp && spirv-dis shuffle.spv | grep Shuffle
-circle -shader -emit-spirv -c shader.cxx -E vert && spirv-dis shader.spv
+circle -shader -emit-spirv -c shuffle.cxx -shader-entry-point comp && spirv-dis shuffle.spv | grep Shuffle
+circle -shader -emit-spirv -c shader.cxx -shader-entry-point vert && spirv-dis shader.spv
